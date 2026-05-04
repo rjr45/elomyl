@@ -15,6 +15,7 @@ import org.rj.mylelo.elomyl.model.TournamentMatch;
 import org.rj.mylelo.elomyl.model.TournamentPlayer;
 import org.rj.mylelo.elomyl.model.TournamentRound;
 import org.rj.mylelo.elomyl.model.TournamentType;
+import org.rj.mylelo.elomyl.model.TournamentView;
 
 public class HibernateUtil {
 
@@ -38,6 +39,7 @@ public class HibernateUtil {
                 metadataSources.addAnnotatedClass(RaceGame.class);
                 metadataSources.addAnnotatedClass(Store.class);
                 metadataSources.addAnnotatedClass(TournamentType.class);
+                metadataSources.addAnnotatedClass(TournamentView.class);
 
                 Metadata metadata = metadataSources.getMetadataBuilder().build();
                 sessionFactory = metadata.getSessionFactoryBuilder().build();

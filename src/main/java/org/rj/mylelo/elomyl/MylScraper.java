@@ -30,12 +30,17 @@ public class MylScraper {
 
     static final String BASE_URL = "https://torneos.myl.cl";
     static final int GAME_ID = 11;
-    static final int THREADS = 2;
+    static final int THREADS = 1;
     static final int DEBUG_PORT_BASE = 9222;
-    static final int SEASON_ID = 69;
+    static final int SEASON_ID = 72;
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) throws Exception {
+        log.info("=== EloCalculator iniciado ===");
+        new CalcularElo().calcularElo();
+        //new EloCalculator().calculate();
+        log.info("=== EloCalculator finalizado ===");
+
         log.info("=== MylScraper iniciado ===");
 
         log.info("[FASE 1] Recolectando torneos nuevos...");
@@ -46,9 +51,6 @@ public class MylScraper {
 
         log.info("=== FIN ===");
 
-        log.info("=== EloCalculator iniciado ===");
-        new EloCalculator().calculate();
-        log.info("=== EloCalculator finalizado ===");
         HibernateUtil.shutdown();
     }
 
@@ -332,18 +334,13 @@ public class MylScraper {
                 }
             }
 
-            //prepararIds
-            List<Long> personIds = persons.stream().map(p -> p.getId()).distinct().collect(Collectors.toList());
-            List<Long> playerIds = players.stream().map(p -> p.getId()).distinct().collect(Collectors.toList());
-            List<Long> matchIds = matchList.stream().map(m -> m.getId()).distinct().collect(Collectors.toList());
+            GenericDao.updateEntity(persons);
+            GenericDao.updateEntity(players);
+            GenericDao.updateEntity(matchList);
 
-            GenericDao.insertNewOnly(persons, personIds);
-            GenericDao.insertNewOnly(players, playerIds);
-
-            int nuevos = GenericDao.insertNewOnly(matchList, matchIds);
             t.setScraped(true);
             GenericDao.updateEntity(t);
-            log.info("Ronda {}, {} match nuevos", roundId, nuevos);
+            log.info("Ronda {}, {} match nuevos", roundId, matchList.size());
 
             Thread.sleep(1000);
         }

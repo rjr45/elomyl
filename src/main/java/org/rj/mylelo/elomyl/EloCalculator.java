@@ -19,8 +19,8 @@ import java.util.Map;
 public class EloCalculator {
 
     static final double ELO_INICIAL = 1000.0;
-    static final int K_INICIAL = 40;   // primeras 30 partidas
-    static final int K_NORMAL = 20;   // después de 30 partidas
+    static final int K_INICIAL = 40;   
+    static final int K_NORMAL = 20;   
     static final int UMBRAL_K = 30;   // partidas hasta K_INICIAL
 
     public void calculate() {
@@ -66,8 +66,8 @@ public class EloCalculator {
             return session.createQuery(
                     "SELECT m FROM TournamentMatch m "
                     + "JOIN Tournament t ON t.id = m.tournamentId "
-                    + "WHERE "
-                    + "t.typeId IN (4) "
+                    //+ "WHERE "
+                    //+ "t.typeId IN (4) "
                     //+ " t.seasonId IN (72) "
                     + "ORDER BY t.startDate ASC, m.tournamentId ASC, m.roundId ASC, m.id ASC",
                     TournamentMatch.class

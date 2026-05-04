@@ -60,10 +60,10 @@ public class PlayerElo {
         this.personId = personId;
         this.code = code;
         this.fullName = fullName;
-        this.eloCurrent = 1000; //1000
-        this.eloPrevious = 1000; //1000
+        this.eloCurrent = 1000; 
+        this.eloPrevious = 1000;
         this.eloChange = 0;
-        this.eloPeak = 1000; //1000
+        this.eloPeak = 1000; 
         this.matchesPlayed = 0;
         this.wins = 0;
         this.losses = 0;

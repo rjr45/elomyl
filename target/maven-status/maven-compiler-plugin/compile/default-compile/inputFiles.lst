@@ -1,6 +1,7 @@
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\dto\AllTournamentRoundsDto.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\PlayerElo.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\Tournament.java
+C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\CalcularElo.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\Person.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\util\DtoMapper.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\Game.java
@@ -16,5 +17,6 @@ C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elo
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\EloCalculator.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\dto\TournamentMatchesDto.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\TournamentRound.java
+C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\TournamentView.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\dto\TournamentInfoDto.java
 C:\Users\Ruben\Documents\NetBeansProjects\EloMyl\src\main\java\org\rj\mylelo\elomyl\model\TournamentType.java

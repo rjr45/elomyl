@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import lombok.extern.slf4j.Slf4j;
+import org.rj.mylelo.elomyl.model.TournamentView;
 
 @Slf4j
 public class GenericDao {
@@ -67,6 +68,12 @@ public class GenericDao {
             }
             log.error(ex.getMessage());
             throw new RuntimeException("updateEntity error", ex);
+        }
+    }
+
+    public static List<TournamentView> getAllTournamentsView() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM TournamentView WHERE elo_calculated <> 1 OR elo_calculated IS NULL", TournamentView.class).list();
         }
     }
 

@@ -26,6 +26,7 @@ org\rj\mylelo\elomyl\model\Game.class
 org\rj\mylelo\elomyl\dto\AllTournamentRoundsDto$Data.class
 org\rj\mylelo\elomyl\dto\TournamentMatchesDto.class
 org\rj\mylelo\elomyl\dao\GenericDao.class
+org\rj\mylelo\elomyl\CalcularElo.class
 org\rj\mylelo\elomyl\model\Store.class
 org\rj\mylelo\elomyl\model\TournamentMatch.class
 org\rj\mylelo\elomyl\dto\TournamentMatchesDto$Data.class
@@ -35,6 +36,7 @@ org\rj\mylelo\elomyl\dto\TournamentInfoDto$TournamentType.class
 org\rj\mylelo\elomyl\util\HibernateUtil.class
 org\rj\mylelo\elomyl\model\RaceGame.class
 org\rj\mylelo\elomyl\model\Tournament.class
+org\rj\mylelo\elomyl\model\TournamentView.class
 org\rj\mylelo\elomyl\dto\TournamentInfoDto$Race.class
 org\rj\mylelo\elomyl\util\DtoMapper.class
 org\rj\mylelo\elomyl\dto\TournamentInfoDto$Game.class

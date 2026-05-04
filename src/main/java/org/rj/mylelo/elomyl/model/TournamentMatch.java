@@ -70,5 +70,8 @@ public class TournamentMatch {
 
     @Column(name = "modified", length = 50)
     private String modified;
+    
+    @Column(name = "elo_calculated")
+    private Integer eloCalculated;
 
 }
