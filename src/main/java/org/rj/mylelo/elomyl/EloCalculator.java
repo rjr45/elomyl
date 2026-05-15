@@ -66,9 +66,9 @@ public class EloCalculator {
             return session.createQuery(
                     "SELECT m FROM TournamentMatch m "
                     + "JOIN Tournament t ON t.id = m.tournamentId "
-                    //+ "WHERE "
-                    //+ "t.typeId IN (4) "
-                    //+ " t.seasonId IN (72) "
+                    + "WHERE "
+                    + "t.gameId IN (11) "
+                    //+ "AND t.seasonId IN (72) "
                     + "ORDER BY t.startDate ASC, m.tournamentId ASC, m.roundId ASC, m.id ASC",
                     TournamentMatch.class
             ).list();

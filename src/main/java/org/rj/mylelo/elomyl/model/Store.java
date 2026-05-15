@@ -52,5 +52,11 @@ public class Store {
     
     @Column(name = "country_id")
     private Integer countryId;
+    
+    @Column(name = "region_id")
+    private Integer regionId;
+    
+    @Column(name = "location_id")
+    private Integer locationId;
 
 }

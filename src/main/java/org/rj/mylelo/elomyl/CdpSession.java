@@ -3,6 +3,7 @@ package org.rj.mylelo.elomyl;
 import com.google.gson.*;
 import java.net.URI;
 import java.net.http.*;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
@@ -113,64 +114,108 @@ public class CdpSession implements AutoCloseable {
 
     private class WsListener implements WebSocket.Listener {
 
+        private final Set<String> graphqlRequests = ConcurrentHashMap.newKeySet();
+
         @Override
         public void onOpen(WebSocket webSocket) {
             webSocket.request(1);
         }
 
         @Override
-        public CompletionStage<?> onText(WebSocket webSocket, CharSequence data, boolean last) {
+        public CompletionStage<?> onText(WebSocket webSocket,
+                CharSequence data,
+                boolean last) {
 
             buffer.append(data);
 
             if (last) {
+
                 String message = buffer.toString();
                 buffer.setLength(0);
 
                 try {
-                    JsonObject json = JsonParser.parseString(message).getAsJsonObject();
 
+                    // Ignora basura/incompleto
+                    if (!message.startsWith("{")) {
+                        webSocket.request(1);
+                        return null;
+                    }
+
+                    JsonObject json = JsonParser
+                            .parseString(message)
+                            .getAsJsonObject();
+
+                    // Detectar graphql
                     if (json.has("method")
-                            && "Network.responseReceived".equals(json.get("method").getAsString())) {
+                            && "Network.responseReceived"
+                                    .equals(json.get("method").getAsString())) {
 
                         JsonObject params = json.getAsJsonObject("params");
-                        String requestId = params.get("requestId").getAsString();
-                        String url = params.getAsJsonObject("response").get("url").getAsString();
+
+                        String requestId
+                                = params.get("requestId").getAsString();
+
+                        String url
+                                = params.getAsJsonObject("response")
+                                        .get("url")
+                                        .getAsString();
 
                         if (url.contains("graphql")) {
+                            graphqlRequests.add(requestId);
+                        }
+                    }
+
+                    // Esperar loadingFinished
+                    if (json.has("method")
+                            && "Network.loadingFinished"
+                                    .equals(json.get("method").getAsString())) {
+
+                        String requestId
+                                = json.getAsJsonObject("params")
+                                        .get("requestId")
+                                        .getAsString();
+
+                        if (graphqlRequests.contains(requestId)) {
                             sendGetBody(webSocket, requestId);
                         }
                     }
 
-                    if (json.has("method")
-                            && "Network.loadingFinished".equals(json.get("method").getAsString())) {
-
-                        String requestId = json.getAsJsonObject("params").get("requestId").getAsString();
-                        sendGetBody(webSocket, requestId);
-                    }
-
+                    // Obtener body
                     if (json.has("id")
                             && json.has("result")
                             && json.getAsJsonObject("result").has("body")) {
 
-                        String body = json.getAsJsonObject("result").get("body").getAsString();
+                        String body
+                                = json.getAsJsonObject("result")
+                                        .get("body")
+                                        .getAsString();
 
-                        if (waitKeyword != null && body.contains(waitKeyword)) {
+                        if (waitKeyword != null
+                                && body.contains(waitKeyword)) {
+
                             capturedJson = body;
                             latch.countDown();
                         }
                     }
 
                 } catch (JsonSyntaxException ex) {
+
+                    // Ignorar mensajes incompletos
+                } catch (Exception ex) {
+
+                    ex.printStackTrace();
                 }
             }
 
             webSocket.request(1);
+
             return null;
         }
 
         private void sendGetBody(WebSocket ws, String requestId) {
+
             int id = msgId.getAndIncrement();
+
             ws.sendText(
                     "{\"id\":" + id + ","
                     + "\"method\":\"Network.getResponseBody\","

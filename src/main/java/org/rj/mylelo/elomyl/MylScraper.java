@@ -29,16 +29,16 @@ import org.rj.mylelo.elomyl.util.HibernateUtil;
 public class MylScraper {
 
     static final String BASE_URL = "https://torneos.myl.cl";
-    static final int GAME_ID = 11;
-    static final int THREADS = 1;
+    static final int GAME_ID = 11; //11 =FX , 1=IMPERIO
+    static final int THREADS = 2;
     static final int DEBUG_PORT_BASE = 9222;
-    static final int SEASON_ID = 72;
+    static final int SEASON_ID = 72; //72=actual FX 69 y 61 , 52, 49,44,38
     private static final Gson gson = new Gson();
 
     public static void main(String[] args) throws Exception {
         log.info("=== EloCalculator iniciado ===");
         new CalcularElo().calcularElo();
-        //new EloCalculator().calculate();
+        new EloCalculator().calculate();
         log.info("=== EloCalculator finalizado ===");
 
         log.info("=== MylScraper iniciado ===");
@@ -67,7 +67,7 @@ public class MylScraper {
 
                 String url = BASE_URL + "/tournaments?gameId=" + GAME_ID + "&page=" + page + "&seasonId=" + SEASON_ID;
                 String json = session.navigateAndCapture(url, "TournamentListV2", 5);
-
+                
                 if (json == null) {
                     log.warn("Reintentando pagina {}", page);
                     int intento = 1;
@@ -201,7 +201,7 @@ public class MylScraper {
                 int intento = 1;
                 for (int i = 0; i < 10; i++) {
                     log.info("Reintento {}", intento);
-                    infoJson = session.reloadAndCapture("TournamentInfo", 3);
+                    infoJson = session.reloadAndCapture("TournamentInfo", 20);
                     if (infoJson != null) {
                         if (infoJson.trim().startsWith("{\"data\"")) {
                             break;
@@ -232,7 +232,7 @@ public class MylScraper {
             Store store = getStoreFromTournamentInfoDto(data);
             TournamentType tournamentType = getTournamentTypeFromTournamentInfoDto(data);
             t = updateTournamentFromTournamentInfoDto(data, t);
-
+            GenericDao.updateEntity(t);  
             if (t.getStatus() < 5) {
                 log.info("Torneo {} con estado {}: {}", t.getId(), t.getStatus(), t.getUrlView());
                 return;
@@ -281,6 +281,8 @@ public class MylScraper {
             log.warn("JSON no contiene allTournamentRounds, torneo {}", t.getId());
             return;
         }
+        
+        GenericDao.updateEntity(t);
 
         for (AllTournamentRounds round : rounds.data.allTournamentRounds) {
             TournamentRound tournamentRound = getRoundFromTournamentDto(round);
@@ -290,12 +292,12 @@ public class MylScraper {
             String roundViewUrl = BASE_URL + tournamentRound.getUrlView() + "/" + tournamentRound.getTournamentId();
             String roundData = session.navigateAndCapture(roundViewUrl, "TournamentRound", 20);
 
-            if (roundData == null) {
+            if (roundData == null || !roundData.trim().startsWith("{\"data\"")) {
                 log.warn("Reintentando match {}", t.toString());
                 int intento = 1;
                 for (int i = 0; i < 10; i++) {
                     log.info("Reintento {}", intento);
-                    roundData = session.reloadAndCapture("TournamentRound", 3);
+                    roundData = session.reloadAndCapture("TournamentRound", 20);
                     if (roundData != null) {
                         if (roundData.trim().startsWith("{\"data\"")) {
                             break;

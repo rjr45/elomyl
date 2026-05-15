@@ -130,6 +130,8 @@ public class DtoMapper {
         store.setSiteUrl(data.data.TournamentInfo.Tournament.Store.siteUrl);
         store.setRegion(data.data.TournamentInfo.Tournament.Address.Region);
         store.setCountryId(data.data.TournamentInfo.Tournament.Address.countryId);
+        store.setRegionId(data.data.TournamentInfo.Tournament.Address.regionId);
+        store.setLocationId(data.data.TournamentInfo.Tournament.Address.locationId);
         return store;
     }
 
